@@ -16,7 +16,7 @@ jobs:
         id: get_latest_release
         run: |
           RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest)
+            https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/)
           echo "API Response: $RESPONSE"
           LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
