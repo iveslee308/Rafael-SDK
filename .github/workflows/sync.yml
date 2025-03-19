@@ -40,9 +40,6 @@ jobs:
           # 提取 release 的版本号
           LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
           
-          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE)
-
           # 检查是否成功提取到版本号
           if [ "$LATEST_RELEASE" == "null" ]; then
             echo "Error: No valid release found."
@@ -51,36 +48,13 @@ jobs:
           
           #echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
           echo "Release $LATEST_RELEASE found"
+          
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
+            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE)
 
+          # 打印响应内容，方便调试
+          echo "API Response: $RESPONSE"
           
-      # Check if there are assets in the release
-      #- name: Check for assets in release
-      #  id: check_assets
-      #  run: |
-      #    # Check if 'assets' field is empty or null
-      #    ASSETS=$(echo "$LATEST_RELEASE" | jq -r '.assets')
-          
-      #    if [ "$ASSETS" == "null" ] || [ "$ASSETS" == "[]" ]; then
-      #      echo "No assets found for this release."
-      #      exit 1
-      #    fi 
-          
-     # - name: Download release asset from private repo
-     #   run: |
-     #     # Get the asset URL from the release data
-     #     ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-     #       https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | \
-     #       jq -r '.assets[] | select(.name | test(".*\\.zip$")) | .url')
-      
-     #     if [ -z "$ASSET_URL" ]; then
-     #       echo "No asset found"
-     #       exit 1
-     #     fi
-      
-     #     # Download the asset
-     #     echo "Downloading asset from $ASSET_URL"
-     #     curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" -o release_asset.zip $ASSET_URL
-
       #- name: Push files to public repo
       #  run: |
       #    cd release-assets
