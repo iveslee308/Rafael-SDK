@@ -52,7 +52,7 @@ jobs:
       - name: Download release asset
         run: |
           # Get the asset URL from the release data
-          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
+          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
             https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | \
             jq -r '.assets[] | select(.name | test(".*\.zip$")) | .url')
           
@@ -63,7 +63,7 @@ jobs:
   
           # Download the asset
           echo "Downloading asset from $ASSET_URL"
-          curl -L -H "Authorization: token ${{ secrets.GH_TOKEN }}" -o release_asset.zip $ASSET_URL
+          curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" -o release_asset.zip $ASSET_URL
 
       #- name: Push files to public repo
       #  run: |
