@@ -46,20 +46,12 @@ jobs:
             exit 1  # 如果没有有效的版本号，退出并标记失败
           fi
 
-          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
+          #echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
           echo "Release $LATEST_RELEASE found"
           
           LATEST_TAG=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_TAG" >> $GITHUB_ENV
           echo "Release $LATEST_TAG found in private repo"
-          
-          RELEASE_ASSETS=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | jq '.assets')
-          if [ "$RELEASE_ASSETS" = "[]" ]; then
-            echo "No assets found in release $LATEST_RELEASE"
-          else
-            echo "Assets found: $RELEASE_ASSETS"
-          fi
           
      # - name: Download release asset from private repo
      #   run: |
