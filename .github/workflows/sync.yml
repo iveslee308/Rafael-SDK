@@ -18,14 +18,14 @@ jobs:
         id: get_latest_release
         run: |
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GH_PAT }}" \
-            https://github.com/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
+            https://api.github.com/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
       - name: Download selected files from private release
         run: |
           mkdir release-assets
           gh release download $LATEST_RELEASE --repo iveslee308/Rafael-SDK-Internal \
-            --dir release-assets --pattern "Dosc\*"
+            --dir release-assets --pattern "Docs\*"
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
 
