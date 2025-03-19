@@ -55,22 +55,13 @@ jobs:
           # 打印响应内容，方便调试
           # echo "API Response: $RESPONSE"
 
-      - name: Fetch Source Code from Private Repo
+      - name: Download Release ZIP from Private Repo
         run: |
-          echo "Fetch Source Code from Private Rep"
-          RESPONSE=$(curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" \
-               -o source.zip \
-               https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip)
-               
-          # 打印响应内容，方便调试
-          echo "API Response: $RESPONSE"    
-             
-      - name: Extract Source Code
-        run: |
-          unzip source.zip -d source_code
-          cd source_code/*
-           echo "Extract Source Code"
-           
+          gh release download V1.9.4 --repo iveslee308/Rafael-SDK-Internal \
+            --pattern "*.zip" --dir downloads
+        env:
+          GH_TOKEN: ${{ secrets.IVESTEST }} 
+
       #- name: Push files to public repo
       #  run: |
       #    cd release-assets
