@@ -6,12 +6,14 @@ on:
   workflow_dispatch:  # 允许手动触发
 
 jobs:
-  sync:
+  check_secrets:
     runs-on: ubuntu-latest
     steps:
-      - name: "check is IVESTEST exists"
-        env: 
-            super_secret: ${{ secrets.IVESTEST }}
-        if: ${{ env.super_secret == 'IVESTEST' }}
-        run: 
-          echo "the secret \"IVESTEST\" has not been made;
+      - name: Check if IVESTEST secret exists
+        run: |
+          if [ -z "${{ secrets.IVESTEST }}" ]; then
+            echo "IVESTEST secret is not set"
+            exit 1
+          else
+            echo "IVESTEST secret is set"
+          fi
