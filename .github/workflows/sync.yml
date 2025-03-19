@@ -25,7 +25,7 @@ jobs:
         id: get_latest_release
         run: |
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
+            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/ | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
           
       - name: Download selected files from private release
