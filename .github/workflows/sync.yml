@@ -64,6 +64,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.IVESTEST }} 
 
+      - name: Extract Source Code
+        run: |
+          unzip source.zip -d source_code
+          cd source_code/*
+
       #- name: Push files to public repo
       #  run: |
       #    cd release-assets
