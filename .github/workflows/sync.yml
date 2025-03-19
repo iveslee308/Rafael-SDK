@@ -11,7 +11,9 @@ jobs:
     steps:
       - name: Checkout public repository
         uses: actions/checkout@v4
-
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          
       - name: Fetch latest release from private repo
         id: get_latest_release
         run: |
@@ -19,6 +21,7 @@ jobs:
             https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
+          
       - name: Checkout public repo (main branch)
         uses: actions/checkout@v4
         with:
