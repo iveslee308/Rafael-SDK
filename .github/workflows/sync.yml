@@ -12,6 +12,14 @@ jobs:
       - name: Checkout public repository
         uses: actions/checkout@v4
 
+      - name: Set the release version
+        run: |
+          export LATEST_RELEASE=$(gh release list --repo iveslee308/Rafael-SDK-Internal --limit 1 --json tagName -q ".[0].tagName")
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+          
+      - name: Print latest release version
+        run: echo $LATEST_RELEASE 
+        
       - name: Fetch latest release from private repo
         id: get_latest_release
         run: |
