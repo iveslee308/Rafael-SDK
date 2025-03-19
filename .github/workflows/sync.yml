@@ -15,8 +15,8 @@ jobs:
       - name: Fetch latest release from private repo
         id: get_latest_release
         run: |
-          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://github.com/iveslee308/Rafael-SDK-Internal/releases/latest)
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IvesTest }}" \
+            https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest)
           
           # 打印完整的 API 响应，帮助调试
           echo "API Response: $RESPONSE"
