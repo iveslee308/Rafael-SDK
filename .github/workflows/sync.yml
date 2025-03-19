@@ -12,6 +12,6 @@ jobs:
       - name: "check is IVESTEST exists"
         env: 
             super_secret: ${{ secrets.IVESTEST }}
-        if: ${{ env.super_secret == '' }}
+        if: ${{ env.super_secret == 'IVESTEST' }}
         run: 
           echo "the secret \"IVESTEST\" has not been made;
