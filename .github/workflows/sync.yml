@@ -16,7 +16,7 @@ jobs:
         id: get_latest_release
         run: |
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GH_PAT }}" \
-            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
+            https://github.com/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
       - name: Read sync_files.txt
