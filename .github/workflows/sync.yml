@@ -17,3 +17,23 @@ jobs:
           else
             echo "IVESTEST secret is set"
           fi
+
+      - name: Checkout public repository
+        uses: actions/checkout@v2
+
+      - name: Fetch latest release from private repo
+        id: get_latest_release
+        run: |
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
+            https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest)
+          
+          echo "API Response: $RESPONSE"
+          
+          if [[ "$RESPONSE" == *"Not Found"* ]]; then
+            echo "Error: No release found."
+            exit 1
+          fi
+
+          LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+          
