@@ -36,12 +36,10 @@ jobs:
             echo "Error: No release found."
             exit 1  # 如果没有找到 release，退出并标记失败
           fi
-
+          
           # 提取 release 的版本号
           LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
-          LATEST_TAG=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
-          echo "Release $LATEST_TAG found in private repo"
-          
+
           # 检查是否成功提取到版本号
           if [ "$LATEST_RELEASE" == "null" ]; then
             echo "Error: No valid release found."
@@ -51,17 +49,17 @@ jobs:
           #echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
           echo "Release $LATEST_RELEASE found"
           
-     # - name: Download release asset from private repo
-     #   run: |
-     #     # Get the asset URL from the release data
-     #     ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-     #       https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | \
-     #       jq -r '.assets[] | select(.name | test(".*\\.zip$")) | .url')
+      - name: Download release asset from private repo
+        run: |
+          # Get the asset URL from the release data
+          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
+            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | \
+            jq -r '.assets[] | select(.name | test(".*\\.zip$")) | .url')
       
-     #     if [ -z "$ASSET_URL" ]; then
-     #       echo "No asset found"
-     #       exit 1
-     #     fi
+          if [ -z "$ASSET_URL" ]; then
+            echo "No asset found"
+            exit 1
+          fi
       
      #     # Download the asset
      #     echo "Downloading asset from $ASSET_URL"
