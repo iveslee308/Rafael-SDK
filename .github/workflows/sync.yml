@@ -9,26 +9,9 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout public repository
-        uses: actions/checkout@v4
-
-      - name: Fetch latest release from private repo
-        id: get_latest_release
-        run: |
-          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IvesTest }}" \
-            https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest)
-          
-          # 打印完整的 API 响应，帮助调试
-          echo "API Response: $RESPONSE"
-          
-          # 检查 API 是否返回有效的响应，只有在响应有效时才解析
-          if [[ "$RESPONSE" == *"Not Found"* ]]; then
-            echo "Error: No release found."
-            exit 1
-          fi
-      
-          LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
-          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
-          
-      - name: Print latest release version
-        run: echo $LATEST_RELEASE 
+      - name: "check is IVESTEST exists"
+        env: 
+            super_secret: ${{ secrets.IVESTEST }}
+        if: ${{ env.super_secret == '' }}
+        run: 
+          echo "the secret \"IVESTEST\" has not been made;
