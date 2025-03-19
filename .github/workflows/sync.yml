@@ -16,22 +16,8 @@ jobs:
         id: get_latest_release
         run: |
           LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GH_PAT }}" \
-            https://github.com/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
+            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/latest | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
-
-      - name: Read sync_files.txt
-        id: read_files
-        run: |
-          echo "Downloading files listed in sync_files.txt..."
-          cat sync_files.txt | while read file; do
-            if [ -n "$file" ]; then
-              echo "Downloading: $file"
-              gh release download $LATEST_RELEASE --repo iveslee308/Rafael-SDK-Internal \
-                --dir release-assets --pattern "$file"
-            fi
-          done
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Checkout public repo (main branch)
         uses: actions/checkout@v4
@@ -48,7 +34,7 @@ jobs:
             fi
           done
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
       
       - name: Commit and Push Changes
         run: |
