@@ -47,22 +47,31 @@ jobs:
           fi
 
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
-
-      - name: Download selected files from private release
+          echo "Release $LATEST_RELEASE found"
+          
+      - name: Download release asset
         run: |
-          mkdir release-assets
-          gh release download $LATEST_RELEASE --repo iveslee308/Rafael-SDK-Internal \
-            --dir release-assets --pattern "RT58x_SDK_Release_Notes.pdf"
-        env:
-          GH_TOKEN: ${{ secrets.IVESTEST }}
+          # Get the asset URL from the release data
+          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
+            https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/tags/$LATEST_RELEASE | \
+            jq -r '.assets[] | select(.name | test(".*\.zip$")) | .url')
+          
+          if [ -z "$ASSET_URL" ]; then
+            echo "No asset found"
+            exit 1
+          fi
+  
+          # Download the asset
+          echo "Downloading asset from $ASSET_URL"
+          curl -L -H "Authorization: token ${{ secrets.GH_TOKEN }}" -o release_asset.zip $ASSET_URL
 
-      - name: Push files to public repo
-        run: |
-          cd release-assets
-          git init
-          git remote add origin https://github.com/iveslee308/Rafael-SDK.git
-          git add .
-          git commit -m "Sync latest release files"
-          git push origin main
-        env:
-          GH_TOKEN: ${{ secrets.IVESTEST }}
+      #- name: Push files to public repo
+      #  run: |
+      #    cd release-assets
+      #    git init
+      #    git remote add origin https://github.com/iveslee308/Rafael-SDK.git
+      #    git add .
+      #    git commit -m "Sync latest release files"
+      #    git push origin main
+      #  env:
+      #    GH_TOKEN: ${{ secrets.IVESTEST }}
