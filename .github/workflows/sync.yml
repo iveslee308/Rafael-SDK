@@ -26,7 +26,7 @@ jobs:
         run: |
           # 发送请求获取最新 release 信息
           RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/latest)
+            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tag)
 
           # 打印响应内容，方便调试
           echo "API Response: $RESPONSE"
