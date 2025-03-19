@@ -48,7 +48,7 @@ jobs:
             fi
           done
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Commit and Push Changes
         run: |
