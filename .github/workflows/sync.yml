@@ -57,8 +57,10 @@ jobs:
 
       - name: Download Release ZIP from Private Repo
         run: |
-          gh release download V1.9.4 --repo iveslee308/Rafael-SDK-Internal \
-            --pattern "*.zip" --dir downloads
+              RESPONSE=$(curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" -o source.zip \
+                   https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip)
+              # 打印响应内容，方便调试
+              echo "API Response: $RESPONSE"            
         env:
           GH_TOKEN: ${{ secrets.IVESTEST }} 
 
