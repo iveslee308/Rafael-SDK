@@ -53,14 +53,17 @@ jobs:
             https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE)
 
           # 打印响应内容，方便调试
-          echo "API Response: $RESPONSE"
+          # echo "API Response: $RESPONSE"
 
       - name: Fetch Source Code from Private Repo
         run: |
-          curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" \
+          echo "Fetch Source Code from Private Rep"
+          RESPONSE=$(curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" \
                -o source.zip \
-               https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip
-             echo "Fetch Source Code from Private Rep"
+               https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip)
+               
+          # 打印响应内容，方便调试
+          echo "API Response: $RESPONSE"    
              
       - name: Extract Source Code
         run: |
