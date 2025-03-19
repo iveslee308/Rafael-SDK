@@ -39,19 +39,17 @@ jobs:
 
           # 提取 release 的版本号
           LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
+          LATEST_TAG=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
+          echo "Release $LATEST_TAG found in private repo"
           
           # 检查是否成功提取到版本号
           if [ "$LATEST_RELEASE" == "null" ]; then
             echo "Error: No valid release found."
             exit 1  # 如果没有有效的版本号，退出并标记失败
           fi
-
+          
           #echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
           echo "Release $LATEST_RELEASE found"
-          
-          LATEST_TAG=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
-          echo "LATEST_RELEASE=$LATEST_TAG" >> $GITHUB_ENV
-          echo "Release $LATEST_TAG found in private repo"
           
      # - name: Download release asset from private repo
      #   run: |
