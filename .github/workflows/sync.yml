@@ -11,11 +11,13 @@ jobs:
     steps:
       - name: Checkout public repository
         uses: actions/checkout@v4
-      
+        env:
+             GH_TOKEN: ${{ secrets.IVESTEST }}
+             
       - name: Fetch latest release from private repo
         id: get_latest_release
         run: |
-          LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.GH_PAT }}" \
+          LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
             https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest | jq -r '.tag_name')
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
@@ -25,11 +27,11 @@ jobs:
           gh release download $LATEST_RELEASE --repo iveslee308/Rafael-SDK-Internal \
             --dir release-assets --pattern "Docs\*"
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.IVESTEST }}
 
       - name: Create release in public repo
         run: |
           gh release create $LATEST_RELEASE release-assets/* --repo iveslee308/Rafael-SDK-Internal \
             --title "Release $LATEST_RELEASE" --notes "Auto-synced from internal repo"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.IVESTEST }}
