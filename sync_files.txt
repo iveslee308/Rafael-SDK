@@ -1,0 +1,2 @@
+Docs\*
+RT58x_SDK_Release_Notes.pdf
