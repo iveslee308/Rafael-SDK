@@ -49,17 +49,29 @@ jobs:
           #echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
           echo "Release $LATEST_RELEASE found"
           
-      - name: Download release asset from private repo
+      # Check if there are assets in the release
+      - name: Check for assets in release
+        id: check_assets
         run: |
-          # Get the asset URL from the release data
-          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
-            https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | \
-            jq -r '.assets[] | select(.name | test(".*\\.zip$")) | .url')
-      
-          if [ -z "$ASSET_URL" ]; then
-            echo "No asset found"
+          # Check if 'assets' field is empty or null
+          ASSETS=$(echo "$LATEST_RELEASE" | jq -r '.assets')
+          
+          if [ "$ASSETS" == "null" ] || [ "$ASSETS" == "[]" ]; then
+            echo "No assets found for this release."
             exit 1
-          fi
+          fi 
+          
+     # - name: Download release asset from private repo
+     #   run: |
+     #     # Get the asset URL from the release data
+     #     ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
+     #       https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | \
+     #       jq -r '.assets[] | select(.name | test(".*\\.zip$")) | .url')
+      
+     #     if [ -z "$ASSET_URL" ]; then
+     #       echo "No asset found"
+     #       exit 1
+     #     fi
       
      #     # Download the asset
      #     echo "Downloading asset from $ASSET_URL"
