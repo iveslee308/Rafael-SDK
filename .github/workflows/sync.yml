@@ -39,7 +39,7 @@ jobs:
 
           # 提取 release 的版本号
           LATEST_RELEASE=$(echo "$RESPONSE" | jq -r '.tag_name')
-
+          
           # 检查是否成功提取到版本号
           if [ "$LATEST_RELEASE" == "null" ]; then
             echo "Error: No valid release found."
@@ -48,6 +48,10 @@ jobs:
 
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV  # 保存版本号为环境变量
           echo "Release $LATEST_RELEASE found"
+          
+          LATEST_TAG=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
+          echo "LATEST_RELEASE=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Release $LATEST_TAG found in private repo"
           
           RELEASE_ASSETS=$(curl -s -H "Authorization: token ${{ secrets.IVESTEST }}" \
             https://api.github.com/repos/iveslee308/Rafael-SDK-Internal/releases/tags/$LATEST_RELEASE | jq '.assets')
