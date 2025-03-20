@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Private Repo
         uses: actions/checkout@v4
         with:
-          repository: iveslee308/Rafael-IoT-SDK-Internal  # prive repo
+          repository: iveslee308/Rafael-SDK-Internal  # prive repo
           token: ${{ secrets.IVESTEST }}  # need `repo` PAT
           path: private_repo  # download private_repo folder
           ref: main  # sync main branch
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout Public Repo
         uses: actions/checkout@v4
         with:
-          repository: iveslee308/Rafael-IoT-SDK  # publid repo
+          repository: iveslee308/Rafael-SDK  # publid repo
           token: ${{ secrets.IVESTEST }}  #  need `repo` PAT
           path: public_repo  # download public_repo folder
           ref: main
