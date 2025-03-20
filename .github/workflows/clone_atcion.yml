@@ -1,62 +1,50 @@
-name: Sync Files Based on List
+name: Sync Private Repo to Public Repo
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # 
+
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
+      # check out prive repo name
       - name: Checkout Private Repo
         uses: actions/checkout@v4
         with:
-          repository: iveslee308/Rafael-IoT-SDK-Internal
-          token: ${{ secrets.IVESTEST }}
-          path: private_repo
+          repository: iveslee308/Rafael-IoT-SDK-Internal  # prive repo
+          token: ${{ secrets.IVESTEST }}  # need `repo` PAT
+          path: private_repo  # download private_repo folder
+          ref: main  # sync main branch
 
-      - name: Fetch latest release from private repo
-        id: get_latest_release
-        run: |
-          for i in {1..5}; do
-            LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.PRIVATE_REPO_TOKEN }}" \
-              https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest | jq -r '.tag_name')
-            if [[ "$LATEST_RELEASE" != "null" && "$LATEST_RELEASE" != "" ]]; then
-              echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
-              echo Release "$LATEST_RELEASE" found
-              exit 0
-            fi
-            echo "Retrying in 10 seconds..."
-            sleep 10
-          done
-          echo "Error: No valid release found!"
-          exit 1
-          
+       # check out publi repo name
       - name: Checkout Public Repo
         uses: actions/checkout@v4
         with:
-          repository: iveslee308/Rafael-IoT-SDK
-          token: ${{ secrets.IVESTEST }}
-          path: public_repo
+          repository: iveslee308/Rafael-IoT-SDK  # publid repo
+          token: ${{ secrets.IVESTEST }}  #  need `repo` PAT
+          path: public_repo  # download public_repo folder
+          ref: main
 
-      - name: Create File List
-        run: |
-          cat > sync_files.txt <<EOL
-          EOL
-
-      - name: Sync Selected Files from List
-        run: |
-          while IFS= read -r line; do
-            rsync -av --relative --files-from=<(echo "$line") private_repo/ public_repo/
-          done < sync_files.txt
-
-      - name: Commit and Push Changes
+      # Sync file and folder
+      - name: Sync Specific Files
         run: |
           cd public_repo
+          
+          # Copy file or folder
+          #rsync -av --delete ../private_repo/src ./  # copy `src/` folder
+          cp ../private_repo/RT58x_SDK_Release_Notes.pdf ./  # copy`file`
+          
+          # config git
+          git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git add .
-          git commit -m "Sync selected files from private repo" || echo "No changes to commit"
-          git push origin main
+
+          # check change
+          git status
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m "Sync from private repo - $(date +'%Y-%m-%d %H:%M:%S')"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi
