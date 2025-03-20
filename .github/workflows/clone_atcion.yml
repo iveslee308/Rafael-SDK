@@ -13,27 +13,27 @@ jobs:
       - name: Checkout Private Repo
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/iveslee308/Rafael-SDK/iveslee308/Rafael-IoT-SDK-Internal
+          repository: https://github.com/iveslee308/Rafael-IoT-SDK-Internal
           token: ${{ secrets.IVESTEST }}
           path: private_repo
 
       - name: Checkout Public Repo
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/iveslee308/iveslee308/Rafael-IoT-SDK
+          repository: https://github.com/iveslee308/Rafael-IoT-SDK
           token: ${{ secrets.IVESTEST }}
           path: public_repo
 
       - name: Create File List
         run: |
-          cat > ./github/sync_files.txt <<EOL
+          cat > sync_files.txt <<EOL
           EOL
 
       - name: Sync Selected Files from List
         run: |
           while IFS= read -r line; do
             rsync -av --relative --files-from=<(echo "$line") private_repo/ public_repo/
-          done < ./github/sync_files.txt
+          done < sync_files.txt
 
       - name: Commit and Push Changes
         run: |
