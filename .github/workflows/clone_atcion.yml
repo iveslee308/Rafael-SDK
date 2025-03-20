@@ -26,7 +26,7 @@ jobs:
 
       - name: Create File List
         run: |
-          cat > sync_files.txt <<EOL
+          cat > ./github/sync_files.txt <<EOL
           EOL
 
       - name: Sync Selected Files from List
