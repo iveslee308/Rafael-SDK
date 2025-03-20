@@ -58,7 +58,7 @@ jobs:
       - name: Download Release ZIP from Private Repo
         run: |
               RESPONSE=$(curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" -o source.zip \
-                   https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip)
+                   https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/TAG_NAME.zip)
               # 打印响应内容，方便调试
               echo "API Response: $RESPONSE"            
         env:
