@@ -1,0 +1,45 @@
+name: Sync Files Based on List
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Private Repo
+        uses: actions/checkout@v4
+        with:
+          repository: iveslee308/Rafael-IoT-SDK-Internal
+          token: ${{ secrets.IVESTEST }}
+          path: private_repo
+
+      - name: Checkout Public Repo
+        uses: actions/checkout@v4
+        with:
+          repository: iveslee308/Rafael-IoT-SDK
+          token: ${{ secrets.IVESTEST }}
+          path: public_repo
+
+      - name: Create File List
+        run: |
+          cat > sync_files.txt <<EOL
+          EOL
+
+      - name: Sync Selected Files from List
+        run: |
+          while IFS= read -r line; do
+            rsync -av --relative --files-from=<(echo "$line") private_repo/ public_repo/
+          done < sync_files.txt
+
+      - name: Commit and Push Changes
+        run: |
+          cd public_repo
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git commit -m "Sync selected files from private repo" || echo "No changes to commit"
+          git push origin main
