@@ -55,10 +55,10 @@ jobs:
           # 打印响应内容，方便调试
           # echo "API Response: $RESPONSE"
 
-          ZIP_URL="https://github.com/YOUR_USERNAME/YOUR_PRIVATE_REPO/archive/refs/tags/$TAG_NAME.zip"
+          ZIP_URL="https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip"
           echo "Downloading from $ZIP_URL..."
               # 下载 Source Code ZIP
-          curl -L -H "Authorization: token ${{ secrets.PRIVATE_REPO_TOKEN }}" -o source.zip "$ZIP_URL"
+          curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" -o source.zip "$ZIP_URL"
 
           # 检查 ZIP 文件是否有效
           if ! unzip -tq source.zip; then
