@@ -13,14 +13,14 @@ jobs:
       - name: Checkout Private Repo
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/iveslee308/Rafael-IoT-SDK-Internal
+          repository: iveslee308/Rafael-IoT-SDK-Internal
           token: ${{ secrets.IVESTEST }}
           path: private_repo
 
       - name: Checkout Public Repo
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/iveslee308/Rafael-IoT-SDK
+          repository: iveslee308/Rafael-IoT-SDK
           token: ${{ secrets.IVESTEST }}
           path: public_repo
 
