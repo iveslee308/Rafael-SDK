@@ -56,7 +56,7 @@ jobs:
           # echo "API Response: $RESPONSE"
 
           ZIP_URL="https://github.com/iveslee308/Rafael-SDK-Internal/archive/refs/tags/$LATEST_RELEASE.zip"
-          echo "Downloading from $ZIP_URL..."
+          echo "Downloading from $ZIP_URL"
               # 下载 Source Code ZIP
           curl -L -H "Authorization: token ${{ secrets.IVESTEST }}" -o source.zip "$ZIP_URL"
 
