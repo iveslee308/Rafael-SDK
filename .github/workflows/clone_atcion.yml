@@ -17,6 +17,23 @@ jobs:
           token: ${{ secrets.IVESTEST }}
           path: private_repo
 
+      - name: Fetch latest release from private repo
+        id: get_latest_release
+        run: |
+          for i in {1..5}; do
+            LATEST_RELEASE=$(curl -s -H "Authorization: token ${{ secrets.PRIVATE_REPO_TOKEN }}" \
+              https://api.github.com/repos/iveslee308/Rafael-IoT-SDK-Internal/releases/latest | jq -r '.tag_name')
+            if [[ "$LATEST_RELEASE" != "null" && "$LATEST_RELEASE" != "" ]]; then
+              echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+              echo Release "$LATEST_RELEASE" found
+              exit 0
+            fi
+            echo "Retrying in 10 seconds..."
+            sleep 10
+          done
+          echo "Error: No valid release found!"
+          exit 1
+          
       - name: Checkout Public Repo
         uses: actions/checkout@v4
         with:
